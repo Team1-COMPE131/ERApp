@@ -8,7 +8,9 @@
 
 #import "SignupViewController.h"
 
-@interface SignupViewController ()
+@interface SignupViewController () {
+    BOOL processing;
+}
 -(void)resignKeyboard;
 -(void)dismiss;
 -(BOOL)verifyInfo;
@@ -30,6 +32,7 @@
     [super viewDidLoad];
     UIBarButtonItem *dismiss = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
     [self.navigationItem setLeftBarButtonItem:dismiss];
+    processing = NO;
     dismissFlag = NO;
     accountType = 0;
     fname = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
@@ -195,10 +198,17 @@
         }
     }
     else {
-        [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
         [cell setAccessoryType:UITableViewCellAccessoryNone];
         [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
         [cell.textLabel setText:@"Sign Up"];
+        if (processing) {
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [cell.textLabel setTextColor:[UIColor grayColor]];
+        }
+        else {
+            [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
+            [cell.textLabel setTextColor:[UIColor blackColor]];
+        }
     }
     
     return cell;
@@ -218,7 +228,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section==2 && indexPath.row==0) {
+    if (indexPath.section==2 && indexPath.row==0 && !processing) {
         dismissFlag = YES;
         AccountTypeViewController *typeView = [[AccountTypeViewController alloc] initWithType:accountType];
         [typeView setTitle:@"Select Account Type"];
@@ -226,7 +236,7 @@
         [self resignKeyboard];
         [self.navigationController pushViewController:typeView animated:YES];
     }
-    else if(indexPath.section==3 && indexPath.row==0) {
+    else if(indexPath.section==3 && indexPath.row==0 && !processing) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self signup];
     }
@@ -378,7 +388,7 @@
         stop = YES;
         alert = @"Your password must be at least 5 characters long.";
     }
-    if ([passconf.text isEqualToString:pass.text] && !stop) {
+    if (![passconf.text isEqualToString:pass.text] && !stop) {
         stop = YES;
         alert = @"Your password does not match your confirmation password.";
     }
@@ -396,7 +406,26 @@
 
 -(void)signup {
     if([self verifyInfo]) {
-        
+        [self resignKeyboard];
+        processing = YES;
+        [table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:UITableViewRowAnimationNone];
+        [fname setEnabled:NO];
+        [lname setEnabled:NO];
+        [email setEnabled:NO];
+        [pass setEnabled:NO];
+        [passconf setEnabled:NO];
+        [company setEnabled:NO];
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com/signup"]];
+        [datReq setPostValue:email.text forKey:@"Username"];
+        [datReq setPostValue:pass.text forKey:@"Password"];
+        [datReq setPostValue:passconf.text forKey:@"ConfirmPassword"];
+        [datReq setPostValue:fname.text forKey:@"FirstName"];
+        [datReq setPostValue:lname.text forKey:@"LastName"];
+        [datReq setPostValue:[NSNumber numberWithBool:accountType] forKey:@"IsCorp"];
+        if (accountType==1) {
+            [datReq setPostValue:company forKey:@"CorpName"];
+        }
+        [datReq startAsynchronous];
     }
 }
 
@@ -435,6 +464,46 @@
     else {
         [cell.textLabel setText:@"Corporate Account"];
     }
+}
+
+#pragma mark ASIHTTPRequestDelegate
+
+-(void)requestFinished:(ASIHTTPRequest *)request {
+    NSLog(@"%@", request.responseString);
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    NSDictionary *resp = [parser objectWithString:request.responseString];
+    if ([resp objectForKey:@"Error"]!=nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Sign Up" message:[resp objectForKey:@"Error"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Up Successful" message:[resp objectForKey:@"Message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
+    [fname setEnabled:YES];
+    [lname setEnabled:YES];
+    [email setEnabled:YES];
+    [pass setEnabled:YES];
+    [passconf setEnabled:YES];
+    [company setEnabled:YES];
+    processing = NO;
+    [table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:UITableViewRowAnimationNone];
+    datReq = nil;
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)request {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Sign Up" message:@"Please make sure you are connected to a network." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [alert show];
+    [fname setEnabled:YES];
+    [lname setEnabled:YES];
+    [email setEnabled:YES];
+    [pass setEnabled:YES];
+    [passconf setEnabled:YES];
+    [company setEnabled:YES];
+    processing = NO;
+    [table reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]] withRowAnimation:UITableViewRowAnimationNone];
+    datReq = nil;
 }
 
 @end

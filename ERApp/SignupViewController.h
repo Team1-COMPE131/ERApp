@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ASIFormDataRequest.h"
 #import "AccountTypeViewController.h"
+#import "SBJson.h"
 
 @interface SignupViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, ASIHTTPRequestDelegate, UITextFieldDelegate,AccountTypeDelegate> {
     BOOL dismissFlag;

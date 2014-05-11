@@ -38,7 +38,9 @@
     [username setKeyboardType:UIKeyboardTypeDefault];
     [username setTextColor:[UIColor darkGrayColor]];
     [username setReturnKeyType:UIReturnKeyNext];
+    [username setClearButtonMode:UITextFieldViewModeWhileEditing];
     [username setPlaceholder:@"Email"];
+    [username setKeyboardType:UIKeyboardTypeEmailAddress];
     password = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [password setDelegate:self];
     [password setSecureTextEntry:YES];
@@ -46,6 +48,10 @@
     [password setReturnKeyType:UIReturnKeyDone];
     [password setPlaceholder:@"Password"];
     loggingIn = NO;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [username becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning
@@ -161,6 +167,15 @@
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
     NSLog(@"%@", request.responseString);
     
+    SBJsonParser *parser = [[SBJsonParser alloc] init];
+    NSDictionary *resp = [parser objectWithString:request.responseString];
+    if ([resp objectForKey:@"Error"]!=nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Log In" message:[resp objectForKey:@"Error"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else {
+        
+    }
     datReq = nil;
 }
 
@@ -170,7 +185,9 @@
     [password setEnabled:YES];
     [[[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] textLabel] setTextColor:[UIColor blackColor]];
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
-    NSLog(@"Failed");
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Log In" message:@"Please make sure you are connected to a network." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [alert show];
     
     datReq = nil;
 }
