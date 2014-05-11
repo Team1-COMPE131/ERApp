@@ -31,18 +31,20 @@
     [super viewDidLoad];
     UIBarButtonItem *signup = [[UIBarButtonItem alloc] initWithTitle:@"Sign Up" style:UIBarButtonItemStyleBordered target:self action:@selector(signup)];
     [self.navigationItem setLeftBarButtonItem:signup];
-    username = [[UITextField alloc] initWithFrame:CGRectMake(105, 0, 195, 44)];
+    username = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [username setDelegate:self];
     [username setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [username setAutocorrectionType:UITextAutocorrectionTypeNo];
     [username setKeyboardType:UIKeyboardTypeDefault];
     [username setTextColor:[UIColor darkGrayColor]];
     [username setReturnKeyType:UIReturnKeyNext];
-    password = [[UITextField alloc] initWithFrame:CGRectMake(105, 0, 195, 44)];
+    [username setPlaceholder:@"Email"];
+    password = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [password setDelegate:self];
     [password setSecureTextEntry:YES];
     [password setTextColor:[UIColor darkGrayColor]];
     [password setReturnKeyType:UIReturnKeyDone];
+    [password setPlaceholder:@"Password"];
     loggingIn = NO;
 }
 
@@ -87,11 +89,9 @@
     if (indexPath.section==0) {
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         if (indexPath.row==0) {
-            [cell.textLabel setText:@"Username"];
             [cell.contentView addSubview:username];
         }
         else {
-            [cell.textLabel setText:@"Password"];
             [cell.contentView addSubview:password];
         }
     }
@@ -103,7 +103,7 @@
         }
         else {
             [cell setSelectionStyle:UITableViewCellSelectionStyleDefault];
-            [cell.textLabel setText:@"Sign Up"];
+            [cell.textLabel setText:@"Sign In"];
         }
     }
     
@@ -160,6 +160,8 @@
     [[[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] textLabel] setTextColor:[UIColor blackColor]];
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
     NSLog(@"%@", request.responseString);
+    
+    datReq = nil;
 }
 
 -(void)requestFailed:(ASIHTTPRequest *)request {
@@ -169,6 +171,8 @@
     [[[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] textLabel] setTextColor:[UIColor blackColor]];
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
     NSLog(@"Failed");
+    
+    datReq = nil;
 }
 
 @end

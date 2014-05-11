@@ -14,11 +14,6 @@
 		7335437F18D27B39007ABED2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7335437E18D27B39007ABED2 /* main.m */; };
 		7335438318D27B39007ABED2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7335438218D27B39007ABED2 /* AppDelegate.m */; };
 		7335438B18D27B39007ABED2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7335438A18D27B39007ABED2 /* Images.xcassets */; };
-		7335439218D27B39007ABED2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335439118D27B39007ABED2 /* XCTest.framework */; };
-		7335439318D27B39007ABED2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335437218D27B39007ABED2 /* Foundation.framework */; };
-		7335439418D27B39007ABED2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335437618D27B39007ABED2 /* UIKit.framework */; };
-		7335439C18D27B39007ABED2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7335439A18D27B39007ABED2 /* InfoPlist.strings */; };
-		7335439E18D27B39007ABED2 /* ERAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7335439D18D27B39007ABED2 /* ERAppTests.m */; };
 		733543AD18D27DBE007ABED2 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 733543AB18D27DBE007ABED2 /* LoginViewController.m */; };
 		733543AE18D27DBE007ABED2 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 733543AC18D27DBE007ABED2 /* LoginViewController.xib */; };
 		738D8958191443330062CC30 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738D8957191443330062CC30 /* CFNetwork.framework */; };
@@ -26,6 +21,8 @@
 		738D895D191443550062CC30 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 738D895C191443550062CC30 /* Reachability.m */; };
 		738D8960191443730062CC30 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 738D895F191443730062CC30 /* libz.dylib */; };
 		738D8962191443800062CC30 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738D8961191443800062CC30 /* MobileCoreServices.framework */; };
+		73A57ED7191CDD75007677B3 /* AccountTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73A57ED5191CDD75007677B3 /* AccountTypeViewController.m */; };
+		73A57ED8191CDD75007677B3 /* AccountTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73A57ED6191CDD75007677B3 /* AccountTypeViewController.xib */; };
 		73F197E718FB7B5B000C9BFE /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73F197E518FB7B5B000C9BFE /* SignupViewController.m */; };
 		73F197E818FB7B5B000C9BFE /* SignupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F197E618FB7B5B000C9BFE /* SignupViewController.xib */; };
 		73F197EC18FB7CA9000C9BFE /* ExpenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73F197EA18FB7CA9000C9BFE /* ExpenseViewController.m */; };
@@ -55,16 +52,6 @@
 		73F1983818FB805E000C9BFE /* Expense.m in Sources */ = {isa = PBXBuildFile; fileRef = 73F1983718FB805E000C9BFE /* Expense.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		7335439518D27B39007ABED2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7335436718D27B39007ABED2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7335436E18D27B39007ABED2;
-			remoteInfo = ERApp;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		7335436F18D27B39007ABED2 /* ERApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ERApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7335437218D27B39007ABED2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -77,7 +64,6 @@
 		7335438118D27B39007ABED2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7335438218D27B39007ABED2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7335438A18D27B39007ABED2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		7335439018D27B39007ABED2 /* ERAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ERAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7335439118D27B39007ABED2 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7335439918D27B39007ABED2 /* ERAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ERAppTests-Info.plist"; sourceTree = "<group>"; };
 		7335439B18D27B39007ABED2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -91,6 +77,10 @@
 		738D895C191443550062CC30 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		738D895F191443730062CC30 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		738D8961191443800062CC30 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		73A57ED4191CDD75007677B3 /* AccountTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountTypeViewController.h; sourceTree = "<group>"; };
+		73A57ED5191CDD75007677B3 /* AccountTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountTypeViewController.m; sourceTree = "<group>"; };
+		73A57ED6191CDD75007677B3 /* AccountTypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountTypeViewController.xib; sourceTree = "<group>"; };
+		73A57ED9191CDDB3007677B3 /* AccountTypeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountTypeDelegate.h; sourceTree = "<group>"; };
 		73F197E418FB7B5B000C9BFE /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		73F197E518FB7B5B000C9BFE /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 		73F197E618FB7B5B000C9BFE /* SignupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupViewController.xib; sourceTree = "<group>"; };
@@ -164,16 +154,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7335438D18D27B39007ABED2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7335439218D27B39007ABED2 /* XCTest.framework in Frameworks */,
-				7335439418D27B39007ABED2 /* UIKit.framework in Frameworks */,
-				7335439318D27B39007ABED2 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -191,7 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				7335436F18D27B39007ABED2 /* ERApp.app */,
-				7335439018D27B39007ABED2 /* ERAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,6 +204,10 @@
 				73F197E418FB7B5B000C9BFE /* SignupViewController.h */,
 				73F197E518FB7B5B000C9BFE /* SignupViewController.m */,
 				73F197E618FB7B5B000C9BFE /* SignupViewController.xib */,
+				73A57ED4191CDD75007677B3 /* AccountTypeViewController.h */,
+				73A57ED5191CDD75007677B3 /* AccountTypeViewController.m */,
+				73A57ED6191CDD75007677B3 /* AccountTypeViewController.xib */,
+				73A57ED9191CDDB3007677B3 /* AccountTypeDelegate.h */,
 				73F197E918FB7CA9000C9BFE /* ExpenseViewController.h */,
 				73F197EA18FB7CA9000C9BFE /* ExpenseViewController.m */,
 				73F197EB18FB7CA9000C9BFE /* ExpenseViewController.xib */,
@@ -356,37 +339,14 @@
 			productReference = 7335436F18D27B39007ABED2 /* ERApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7335438F18D27B39007ABED2 /* ERAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 733543A418D27B39007ABED2 /* Build configuration list for PBXNativeTarget "ERAppTests" */;
-			buildPhases = (
-				7335438C18D27B39007ABED2 /* Sources */,
-				7335438D18D27B39007ABED2 /* Frameworks */,
-				7335438E18D27B39007ABED2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7335439618D27B39007ABED2 /* PBXTargetDependency */,
-			);
-			name = ERAppTests;
-			productName = ERAppTests;
-			productReference = 7335439018D27B39007ABED2 /* ERAppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		7335436718D27B39007ABED2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Kevin Jung";
-				TargetAttributes = {
-					7335438F18D27B39007ABED2 = {
-						TestTargetID = 7335436E18D27B39007ABED2;
-					};
-				};
 			};
 			buildConfigurationList = 7335436A18D27B39007ABED2 /* Build configuration list for PBXProject "ERApp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -402,7 +362,6 @@
 			projectRoot = "";
 			targets = (
 				7335436E18D27B39007ABED2 /* ERApp */,
-				7335438F18D27B39007ABED2 /* ERAppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -412,20 +371,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73A57ED8191CDD75007677B3 /* AccountTypeViewController.xib in Resources */,
 				73F197ED18FB7CA9000C9BFE /* ExpenseViewController.xib in Resources */,
 				73F197F218FB7D3C000C9BFE /* AddExpenseViewController.xib in Resources */,
 				7335438B18D27B39007ABED2 /* Images.xcassets in Resources */,
 				7335437D18D27B39007ABED2 /* InfoPlist.strings in Resources */,
 				73F197E818FB7B5B000C9BFE /* SignupViewController.xib in Resources */,
 				733543AE18D27DBE007ABED2 /* LoginViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7335438E18D27B39007ABED2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7335439C18D27B39007ABED2 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,28 +414,13 @@
 				73F1982A18FB7F8D000C9BFE /* NSObject+SBJson.m in Sources */,
 				73F1983818FB805E000C9BFE /* Expense.m in Sources */,
 				73F197EC18FB7CA9000C9BFE /* ExpenseViewController.m in Sources */,
+				73A57ED7191CDD75007677B3 /* AccountTypeViewController.m in Sources */,
 				73F1983418FB7F8D000C9BFE /* SBJsonUTF8Stream.m in Sources */,
 				73F1983318FB7F8D000C9BFE /* SBJsonTokeniser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7335438C18D27B39007ABED2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7335439E18D27B39007ABED2 /* ERAppTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7335439618D27B39007ABED2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7335436E18D27B39007ABED2 /* ERApp */;
-			targetProxy = 7335439518D27B39007ABED2 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7335437B18D27B39007ABED2 /* InfoPlist.strings */ = {
@@ -509,7 +446,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -548,7 +484,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -585,6 +520,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ERApp/ERApp-Prefix.pch";
 				INFOPLIST_FILE = "ERApp/ERApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -598,50 +534,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ERApp/ERApp-Prefix.pch";
 				INFOPLIST_FILE = "ERApp/ERApp-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		733543A518D27B39007ABED2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ERApp.app/ERApp";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ERApp/ERApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "ERAppTests/ERAppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		733543A618D27B39007ABED2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ERApp.app/ERApp";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ERApp/ERApp-Prefix.pch";
-				INFOPLIST_FILE = "ERAppTests/ERAppTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -662,15 +557,6 @@
 			buildConfigurations = (
 				733543A218D27B39007ABED2 /* Debug */,
 				733543A318D27B39007ABED2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		733543A418D27B39007ABED2 /* Build configuration list for PBXNativeTarget "ERAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				733543A518D27B39007ABED2 /* Debug */,
-				733543A618D27B39007ABED2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -17,6 +17,7 @@
 }
 
 -(id)initWithExpense:(NSDictionary*)expenseData;
+-(id)initWithTitle:(NSString*)t category:(int)c amount:(double)a date:(NSDate*)d receipt:(NSData*)r;
 -(NSString*)getTitle;
 -(int)getCategory;
 -(double)getAmount;

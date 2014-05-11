@@ -8,13 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "ASIFormDataRequest.h"
+#import "AccountTypeViewController.h"
 
-@interface SignupViewController : UIViewController<ASIHTTPRequestDelegate> {
+@interface SignupViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, ASIHTTPRequestDelegate, UITextFieldDelegate,AccountTypeDelegate> {
+    BOOL dismissFlag;
+    NSInteger accountType;
+    IBOutlet UITableView *table;
     ASIFormDataRequest *datReq;
+    UITextField *fname;
+    UITextField *lname;
+    UITextField *email;
+    UITextField *pass;
+    UITextField *passconf;
+    UITextField *company;
+    BOOL kbDismiss;
 }
-
--(void)dismiss;
--(void)verifyInfo;
--(void)signup;
 
 @end
