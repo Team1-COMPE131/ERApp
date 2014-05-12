@@ -8,6 +8,7 @@
 
 #import "ExpenseViewController.h"
 #import "AddExpenseViewController.h"
+#import "ExpenseDetailViewController.h"
 
 @interface ExpenseViewController ()
 -(void)refresh:(id)sender;
@@ -15,6 +16,9 @@
 -(IBAction)logout:(id)sender;
 -(void)edit:(id)sender;
 -(void)cancelEdit:(id)sender;
+-(NSString*)shortendDay:(NSString*)longString;
+-(IBAction)reports:(id)sender;
+-(IBAction)filterSelector:(id)sender;
 @end
 
 @implementation ExpenseViewController
@@ -45,16 +49,35 @@
     [self.navigationItem setLeftBarButtonItem:edit];
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target:self action:@selector(addExpenseReport)];
     [self.navigationItem setRightBarButtonItem:add];
-    [accountLabel setText:[NSString stringWithFormat:@"Account: %@", [defaults objectForKey:@"username"]]];
+    [self setToolbarItems:@[[[UIBarButtonItem alloc] initWithTitle:@"Reports" style:UIBarButtonItemStylePlain target:self action:@selector(reports:)], [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil], [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout:)]]];
+    downAlert = [[UIAlertView alloc] initWithTitle:@"Downloading Report..." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
-    [datReq setDelegate:self];
-    [datReq setTimeOutSeconds:0];
-    [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
-    [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
-    [datReq startAsynchronous];
+    self.navigationController.navigationBar.translucent = NO;
+    UIEdgeInsets inset = UIEdgeInsetsMake(0, 0, 64, 0);
+    [table setContentInset:inset];
+    [table setScrollIndicatorInsets:inset];
+    if (filterSeg.selectedSegmentIndex==0) {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq startAsynchronous];
+    }
+    else {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/showExpense"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq setPostValue:[NSNumber numberWithLong:filterSeg.selectedSegmentIndex-1] forKey:@"filter"];
+        [datReq startAsynchronous];
+    }
+    [self.navigationController setToolbarHidden:NO animated:YES];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,6 +118,12 @@
         }
     }
     
+    for (UIView *v in cell.contentView.subviews) {
+        if ([v isKindOfClass:[UIView class]] && [v tag]==300) {
+            [v removeFromSuperview];
+        }
+    }
+    
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     Expense *e = [expenses objectAtIndex:indexPath.row];
     [cell.textLabel setText:[e vendor]];
@@ -103,6 +132,22 @@
     NSLocale *locale = [NSLocale currentLocale];
     NSString *currency = [locale displayNameForKey:NSLocaleCurrencySymbol value:[e currency]];
     [amount setText:[NSString stringWithFormat:@"%@%.2f", currency, [e amount]]];
+    
+    if ([e amount]>1000.0f && [[e currency] isEqualToString:@"USD"]) {
+        [amount setTextColor:[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f]];
+        UIView *flag = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, 56)];
+        [flag setTag:300];
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = flag.bounds;
+        gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:255/255.0f green:106/255.0f blue:0.0f alpha:1.0f] CGColor]];
+        [flag.layer insertSublayer:gradient atIndex:0];
+        [flag setBackgroundColor:[UIColor redColor]];
+        [cell.contentView addSubview:flag];
+    }
+    else {
+        [amount setTextColor:[UIColor colorWithRed:0 green:160/255.0f blue:25/255.0f alpha:1.0f]];
+    }
+    
     return cell;
 }
 
@@ -114,8 +159,10 @@
             amount = label;
         }
     }
-    [amount setFrame:CGRectMake(225, 0, 65, 56)];
-    
+    if (tableView.isEditing) {
+        [amount setFrame:CGRectMake(225, 0, 55, 56)];
+    }
+    else [amount setFrame:CGRectMake(225, 0, 65, 56)];
     return YES;
 }
 
@@ -151,10 +198,9 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Expense *expense = [expenses objectAtIndex:indexPath.row];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
-    [imageView setImage:[expense receipt]];
-    [imageView setBackgroundColor:[UIColor blackColor]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    ExpenseDetailViewController *detailView = [[ExpenseDetailViewController alloc] initWithExpense:[expenses objectAtIndex:indexPath.row]];
+    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 #pragma mark AlertViewDelegate
@@ -174,11 +220,21 @@
     if ([table isEditing]) {
         [self cancelEdit:nil];
     }
-    datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
-    [datReq setDelegate:self];
-    [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
-    [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
-    [datReq startAsynchronous];
+    if (filterSeg.selectedSegmentIndex==0) {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq startAsynchronous];
+    }
+    else {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/showExpense"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq setPostValue:[NSNumber numberWithLong:filterSeg.selectedSegmentIndex-1] forKey:@"filter"];
+        [datReq startAsynchronous];
+    }
 }
 
 -(void)addExpenseReport {
@@ -208,6 +264,44 @@
     [self.navigationItem setRightBarButtonItem:add animated:YES];
 }
 
+-(NSString*)shortendDay:(NSString*)longString {
+    NSArray *longDay = @[@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday",@"Sunday"];
+    NSArray *shortDay = @[@"Mon",@"Tues",@"Wed",@"Thurs",@"Fri",@"Sat",@"Sun"];
+    for (int i=0; i<[longDay count]; i++) {
+        longString = [longString stringByReplacingOccurrencesOfString:[longDay objectAtIndex:i] withString:[shortDay objectAtIndex:i]];
+        
+    }
+    return longString;
+}
+
+-(IBAction)reports:(id)sender {
+    UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"Download Expense Reports" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"All", @"This Year", @"This Month", @"This Week", nil];
+    [action showFromToolbar:self.navigationController.toolbar];
+}
+
+-(IBAction)filterSelector:(id)sender {
+    long sel = [(UISegmentedControl*)sender selectedSegmentIndex];
+    if (datReq!=nil) {
+        [datReq cancel];
+        datReq = nil;
+    }
+    if (sel==0) {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq startAsynchronous];
+    }
+    else {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/showExpense"]];
+        [datReq setDelegate:self];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq setPostValue:[NSNumber numberWithLong:(sel-1)] forKey:@"filter"];
+        [datReq startAsynchronous];
+    }
+}
+
 #pragma mark ASIHTTPRequest
 
 -(void)requestFinished:(ASIHTTPRequest *)request {
@@ -221,7 +315,7 @@
     else {
         [expenses removeAllObjects];
         for (NSDictionary *exp in resp) {
-            Expense *expense = [[Expense alloc] initWithID:[exp objectForKey:@"expenseId"] vendor:[exp objectForKey:@"vendor"] location:[exp objectForKey:@"location"] type:[exp objectForKey:@"type"] amount:[[exp objectForKey:@"amount"] doubleValue] currency:[exp objectForKey:@"currency"] time:[exp objectForKey:@"time"] receipt:nil note:[exp objectForKey:@"note"]];
+            Expense *expense = [[Expense alloc] initWithID:[exp objectForKey:@"expenseId"] vendor:[exp objectForKey:@"vendor"] location:[exp objectForKey:@"location"] type:[exp objectForKey:@"type"] amount:[[exp objectForKey:@"amount"] doubleValue] currency:[exp objectForKey:@"currency"] time:[self shortendDay:[exp objectForKey:@"time"]] receipt:[exp objectForKey:@"receipt"] note:[exp objectForKey:@"note"]];
             [expenses addObject:expense];
         }
         [table reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -238,6 +332,33 @@
     datReq = nil;
     if (refresher.refreshing) {
         [refresher endRefreshing];
+    }
+}
+
+#pragma mark UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex!=4) {
+        [downAlert show];
+        ASIFormDataRequest *csvReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/getcsv"]];
+        [csvReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [csvReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [csvReq setDownloadDestinationPath:[RESOURCES_DIR stringByAppendingPathComponent:@"report.csv"]];
+        __unsafe_unretained ASIFormDataRequest *_csvReq = csvReq;
+        [csvReq setCompletionBlock:^{
+            [downAlert dismissWithClickedButtonIndex:0 animated:YES];
+            if ([_csvReq responseStatusCode]==200) {
+                NSArray *activityItems = @[[NSURL fileURLWithPath:[RESOURCES_DIR stringByAppendingPathComponent:@"report.csv"]]];
+                UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+                activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact];
+                [self presentViewController:activityVC animated:TRUE completion:nil];
+            }
+            else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Download Report" message:@"An error occurred while downloading Expense Report. Please try again later." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                [alert show];
+            }
+        }];
+        [csvReq startAsynchronous];
     }
 }
 

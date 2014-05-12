@@ -1,16 +1,15 @@
 //
-//  AddExpenseViewController.m
+//  EditExpenseViewController.m
 //  ERApp
 //
-//  Created by Kevin Jung on 4/13/14.
+//  Created by Kevin Jung on 5/12/14.
 //  Copyright (c) 2014 Kevin Jung. All rights reserved.
 //
 
-#import "AddExpenseViewController.h"
-#import "UIImage+Scale.h"
+#import "EditExpenseViewController.h"
 #import "SBJson.h"
 
-@interface AddExpenseViewController () {
+@interface EditExpenseViewController () {
     BOOL kbDismiss;
     UITextField *vendor;
     UITextField *location;
@@ -21,18 +20,33 @@
     BOOL imageSelected;
     UIImage *selImage;
     UIAlertView *procAlert;
+    BOOL imageChanged;
 }
 -(void)cancel:(id)sender;
--(void)addReport:(id)sender;
+-(void)commitChanges:(id)sender;
 @end
 
-@implementation AddExpenseViewController
+@implementation EditExpenseViewController
+@synthesize delegate;
+
+-(id)initWithExpense:(Expense *)ex withReceiptImage:(UIImage *)r {
+    self = [self initWithNibName:@"EditExpenseViewController" bundle:nil];
+    if (self) {
+        expense = ex;
+        if (r!=nil) {
+            selImage = r;
+            imageSelected = YES;
+        }
+        else imageSelected = NO;
+    }
+    return self;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self.navigationItem setTitle:@"Add Expense"];
+        [self.navigationItem setTitle:@"Update Expense"];
     }
     return self;
 }
@@ -42,8 +56,8 @@
     [super viewDidLoad];
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel:)];
     [self.navigationItem setLeftBarButtonItem:cancel];
-    UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithTitle:@"Add" style:UIBarButtonItemStyleBordered target:self action:@selector(addReport:)];
-    [self.navigationItem setRightBarButtonItem:add];
+    UIBarButtonItem *commit = [[UIBarButtonItem alloc] initWithTitle:@"Commit" style:UIBarButtonItemStyleBordered target:self action:@selector(commitChanges:)];
+    [self.navigationItem setRightBarButtonItem:commit];
     vendor = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [vendor setDelegate:self];
     [vendor setAutocapitalizationType:UITextAutocapitalizationTypeWords];
@@ -53,6 +67,7 @@
     [vendor setReturnKeyType:UIReturnKeyNext];
     [vendor setClearButtonMode:UITextFieldViewModeWhileEditing];
     [vendor setPlaceholder:@"Name of Expense"];
+    [vendor setText:[expense vendor]];
     location = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [location setDelegate:self];
     [location setAutocapitalizationType:UITextAutocapitalizationTypeWords];
@@ -62,6 +77,7 @@
     [location setReturnKeyType:UIReturnKeyNext];
     [location setClearButtonMode:UITextFieldViewModeWhileEditing];
     [location setPlaceholder:@"Location (e.g. San Jose, CA)"];
+    [location setText:[expense location]];
     amount = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [amount setDelegate:self];
     [amount setKeyboardType:UIKeyboardTypeDecimalPad];
@@ -69,25 +85,120 @@
     [amount setReturnKeyType:UIReturnKeyNext];
     [amount setClearButtonMode:UITextFieldViewModeWhileEditing];
     [amount setPlaceholder:@"Amount (e.g. 9.25)"];
+    [amount setText:[NSString stringWithFormat:@"%.2f", [expense amount]]];
     note = [[UITextView alloc] initWithFrame:CGRectMake(10, 5, 300, 122)];
     [note setDelegate:self];
     [note setTextColor:[UIColor darkGrayColor]];
     [note setFont:[UIFont systemFontOfSize:16.0f]];
-    expenseType = [[NSMutableString alloc] initWithString:@"Rent"];
-    currency = [[NSMutableString alloc] initWithString:@"USD"];
+    if ((NSNull*)[expense note]!=[NSNull null]) {
+        [note setText:[expense note]];
+    }
+    expenseType = [[NSMutableString alloc] initWithString:[expense type]];
+    currency = [[NSMutableString alloc] initWithString:[expense currency]];
     kbDismiss = NO;
-    imageSelected = NO;
-    procAlert = [[UIAlertView alloc] initWithTitle:@"Submitting Expense..." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+    procAlert = [[UIAlertView alloc] initWithTitle:@"Updating Expense..." message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    imageChanged = NO;
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark Private Methods
+
+-(void)cancel:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)commitChanges:(id)sender {
+    kbDismiss = YES;
+    [vendor resignFirstResponder];
+    [location resignFirstResponder];
+    [amount resignFirstResponder];
+    [note resignFirstResponder];
+    if ([[vendor text] length]==0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Update" message:@"Please provide the Expense Name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
+    if ([[location text] length]==0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Update" message:@"Please provide the Location." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
+    if ([[location text] length]==0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Update" message:@"Please provide the Amount of Expense." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        return;
+    }
+    
+    [procAlert show];
+    
+    if (imageSelected) {
+        if (imageChanged) {
+            ASIFormDataRequest *imageReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://erapp.kevjung.com/receipt_proc.php"]];
+            [imageReq setData:UIImageJPEGRepresentation(selImage, 1.0f) withFileName:@"receipt.jpg" andContentType:@"image/jpeg" forKey:@"receipt"];
+            __unsafe_unretained ASIFormDataRequest *_imageReq = imageReq;
+            [imageReq setCompletionBlock:^{
+                if ([_imageReq responseStatusCode]==200) {
+                    datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/updateExpense"]];
+                    [datReq setDelegate:self];
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [datReq setPostValue:[expense expenseID] forKey:@"expenseId"];
+                    [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+                    [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+                    [datReq setPostValue:[vendor text] forKey:@"Vendor"];
+                    [datReq setPostValue:[location text] forKey:@"Location"];
+                    [datReq setPostValue:expenseType forKey:@"Type"];
+                    [datReq setPostValue:[amount text] forKey:@"Amount"];
+                    [datReq setPostValue:currency forKey:@"Currency"];
+                    [datReq setPostValue:[note text] forKey:@"Note"];
+                    [datReq setPostValue:[_imageReq responseString] forKey:@"Receipt"];
+                    [datReq startAsynchronous];
+                }
+                else {
+                    [procAlert dismissWithClickedButtonIndex:0 animated:YES];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Update" message:@"An error occurred while submitting your expense report. Please try again later." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                    [alert show];
+                }
+            }];
+            [imageReq startAsynchronous];
+        }
+        else {
+            datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/updateExpense"]];
+            [datReq setDelegate:self];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [datReq setPostValue:[expense expenseID] forKey:@"expenseId"];
+            [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+            [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+            [datReq setPostValue:[vendor text] forKey:@"Vendor"];
+            [datReq setPostValue:[location text] forKey:@"Location"];
+            [datReq setPostValue:expenseType forKey:@"Type"];
+            [datReq setPostValue:[amount text] forKey:@"Amount"];
+            [datReq setPostValue:currency forKey:@"Currency"];
+            [datReq setPostValue:[note text] forKey:@"Note"];
+            [datReq setPostValue:[expense receipt] forKey:@"Receipt"];
+            [datReq startAsynchronous];
+        }
+    }
+    else {
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/updateExpense"]];
+        [datReq setDelegate:self];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [datReq setPostValue:[expense expenseID] forKey:@"expenseId"];
+        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
+        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        [datReq setPostValue:[vendor text] forKey:@"Vendor"];
+        [datReq setPostValue:[location text] forKey:@"Location"];
+        [datReq setPostValue:expenseType forKey:@"Type"];
+        [datReq setPostValue:[amount text] forKey:@"Amount"];
+        [datReq setPostValue:currency forKey:@"Currency"];
+        [datReq setPostValue:[note text] forKey:@"Note"];
+        [datReq startAsynchronous];
+    }
+    
 }
 
 #pragma mark UITableViewDelegate
@@ -229,92 +340,21 @@
     }
 }
 
-#pragma mark Private Methods
-
--(void)cancel:(id)sender {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)addReport:(id)sender {
-    kbDismiss = YES;
-    [vendor resignFirstResponder];
-    [location resignFirstResponder];
-    [amount resignFirstResponder];
-    [note resignFirstResponder];
-    if ([[vendor text] length]==0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Submit" message:@"Please provide the Expense Name." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-        return;
-    }
-    if ([[location text] length]==0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Submit" message:@"Please provide the Location." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-        return;
-    }
-    if ([[location text] length]==0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Submit" message:@"Please provide the Amount of Expense." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-        return;
-    }
-    
-    [procAlert show];
-    
-    if (imageSelected) {
-        ASIFormDataRequest *imageReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://erapp.kevjung.com/receipt_proc.php"]];
-        [imageReq setData:UIImageJPEGRepresentation(selImage, 1.0f) withFileName:@"receipt.jpg" andContentType:@"image/jpeg" forKey:@"receipt"];
-        __unsafe_unretained ASIFormDataRequest *_imageReq = imageReq;
-        [imageReq setCompletionBlock:^{
-            if ([_imageReq responseStatusCode]==200) {
-                datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/create-expense"]];
-                [datReq setDelegate:self];
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
-                [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
-                [datReq setPostValue:[vendor text] forKey:@"Vendor"];
-                [datReq setPostValue:[location text] forKey:@"Location"];
-                [datReq setPostValue:expenseType forKey:@"Type"];
-                [datReq setPostValue:[amount text] forKey:@"Amount"];
-                [datReq setPostValue:currency forKey:@"Currency"];
-                [datReq setPostValue:[note text] forKey:@"Note"];
-                [datReq setPostValue:[_imageReq responseString] forKey:@"Receipt"];
-                [datReq startAsynchronous];
-            }
-            else {
-                [procAlert dismissWithClickedButtonIndex:0 animated:YES];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Submit" message:@"An error occurred while submitting your expense report. Please try again later." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-                [alert show];
-            }
-        }];
-        [imageReq startAsynchronous];
-    }
-    else {
-        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/create-expense"]];
-        [datReq setDelegate:self];
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [datReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
-        [datReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
-        [datReq setPostValue:[vendor text] forKey:@"Vendor"];
-        [datReq setPostValue:[location text] forKey:@"Location"];
-        [datReq setPostValue:expenseType forKey:@"Type"];
-        [datReq setPostValue:[amount text] forKey:@"Amount"];
-        [datReq setPostValue:currency forKey:@"Currency"];
-        [datReq setPostValue:[note text] forKey:@"Note"];
-        [datReq startAsynchronous];
-    }
-}
-
 #pragma mark ASIHTTPRequest
 
 -(void)requestFinished:(ASIHTTPRequest *)request {
     [procAlert dismissWithClickedButtonIndex:0 animated:YES];
+    NSLog(@"%@", request.responseString);
     SBJsonParser *parser = [[SBJsonParser alloc] init];
     NSDictionary *d = [parser objectWithString:request.responseString];
     if ([d objectForKey:@"Error"]!=nil) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Submit" message:[d objectForKey:@"Error"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Update" message:[d objectForKey:@"Error"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
         [alert show];
         datReq = nil;
         return;
     }
+    Expense *newExpense = [[Expense alloc] initWithID:[expense expenseID] vendor:[vendor text] location:[location text] type:expenseType amount:[[amount text] doubleValue] currency:currency time:[expense time] receipt:[expense receipt] note:[note text]];
+    [delegate expenseUpdatedWithExpense:newExpense andNewReceipt:selImage];
     datReq = nil;
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -417,6 +457,7 @@
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     imageSelected = YES;
+    imageChanged = YES;
     [picker dismissViewControllerAnimated:YES completion:nil];
     UIImage *image = [(UIImage*)[info objectForKey:UIImagePickerControllerOriginalImage] imageScaledToScale:0.15f];
     selImage = image;

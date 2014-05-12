@@ -12,12 +12,13 @@
 #import "Expense.h"
 #import "SBJson.h"
 
-@interface ExpenseViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,ASIHTTPRequestDelegate> {
+@interface ExpenseViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,ASIHTTPRequestDelegate,UIActionSheetDelegate,UIDocumentInteractionControllerDelegate> {
     ASIFormDataRequest *datReq;
     NSMutableArray *expenses;
     IBOutlet UITableView *table;
     UIRefreshControl *refresher;
     NSUserDefaults *defaults;
-    IBOutlet UILabel *accountLabel;
+    IBOutlet UISegmentedControl *filterSeg;
+    UIAlertView *downAlert;
 }
 @end

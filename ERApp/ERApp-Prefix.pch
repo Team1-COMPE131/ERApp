@@ -18,3 +18,4 @@
 #define UIKEYBOARD_SIZE 216.0f
 #define SCREEN_SIZE_HEIGHT [[UIScreen mainScreen] bounds].size.height
 #define SCREEN_IS_4_INCH SCREEN_SIZE_HEIGHT==568.0f
+#define RESOURCES_DIR [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]

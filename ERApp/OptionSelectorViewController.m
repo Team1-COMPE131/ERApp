@@ -47,10 +47,10 @@
     [super viewDidLoad];
     options = [[NSMutableArray alloc] init];
     if (type==0) {
-        [options addObjectsFromArray:@[@"Airfare", @"Baggage/Shipping", @"Gratuities", @"Hotel/Lodging", @"Laundry/Dry Cleaning", @"Meals", @"Mileage", @"Other Travel", @"Parking/Tolls", @"Rental Cars", @"Taxis/Buss/Limos/Subways", @"Telephone/Internet/Fax", @"Trains"]];
+        [options addObjectsFromArray:@[@"Rent", @"Utilities", @"Insurance", @"Fees", @"Wages", @"Taxes", @"Interest", @"Supplies", @"Depreciation", @"Maintenance", @"Travel", @"Meal", @"Entertainment", @"Training", @"Miscellaneous"]];
     }
     else if (type==1) {
-        [options addObjectsFromArray:@[@"USD", @"EUR", @"CYN"]];
+        [options addObjectsFromArray:@[@"USD", @"EUR", @"KRW", @"JPY", @"CNY"]];
     }
     for (int i=0; i<[options count]; i++) {
         if ([[options objectAtIndex:i] isEqualToString:preselection]) {

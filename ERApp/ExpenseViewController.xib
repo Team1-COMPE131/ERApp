@@ -6,7 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExpenseViewController">
             <connections>
-                <outlet property="accountLabel" destination="ayN-Cw-Mku" id="KHJ-XY-E9n"/>
+                <outlet property="filterSeg" destination="xfX-mk-oE7" id="TgQ-Nk-S6r"/>
                 <outlet property="table" destination="WBL-cI-Hpd" id="VIq-zq-Pa5"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -17,42 +17,37 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="56" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="WBL-cI-Hpd">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
+                    <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <segmentedControl key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="0oD-Av-fHc">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <segments>
-                            <segment title="All"/>
-                            <segment title="This Year"/>
-                            <segment title="This Month"/>
-                            <segment title="This Week"/>
-                        </segments>
-                    </segmentedControl>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Fmm-Pf-0Bc"/>
                         <outlet property="delegate" destination="-1" id="j1H-iY-x13"/>
                     </connections>
                 </tableView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zcr-ju-dQW">
-                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BBl-UU-UFc">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <items>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qpu-mr-OSh"/>
-                        <barButtonItem title="Logout" id="UtK-Oc-rIi">
-                            <connections>
-                                <action selector="logout:" destination="-1" id="vCp-ZN-BKg"/>
-                            </connections>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Fsp-ZK-8Or"/>
+                        <barButtonItem style="plain" id="yhJ-Ml-bza">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="xfX-mk-oE7">
+                                <rect key="frame" x="5" y="6" width="310" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="All"/>
+                                    <segment title="This Year"/>
+                                    <segment title="This Month"/>
+                                    <segment title="This Week"/>
+                                </segments>
+                                <connections>
+                                    <action selector="filterSelector:" destination="-1" eventType="valueChanged" id="WG0-16-zbM"/>
+                                </connections>
+                            </segmentedControl>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="eVh-WU-kW4"/>
                     </items>
                 </toolbar>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Account: kevjung@me.com" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="ayN-Cw-Mku">
-                    <rect key="frame" x="8" y="524" width="237" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

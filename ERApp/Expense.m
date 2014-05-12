@@ -11,7 +11,7 @@
 @implementation Expense
 @synthesize expenseID, vendor, location, type, amount, currency, time, receipt, note;
 
--(id)initWithID:(NSString *)eid vendor:(NSString *)v location:(NSString *)l type:(NSString *)ty amount:(double)a currency:(NSString *)c time:(NSString *)t receipt:(UIImage *)r note:(NSString *)n {
+-(id)initWithID:(NSString *)eid vendor:(NSString *)v location:(NSString *)l type:(NSString *)ty amount:(double)a currency:(NSString *)c time:(NSString *)t receipt:(NSString *)r note:(NSString *)n {
     self = [super init];
     if (self) {
         expenseID = eid;

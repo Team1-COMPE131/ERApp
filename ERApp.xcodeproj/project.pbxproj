@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		730CE8E219210083005D736F /* UIImage+Scale.m in Sources */ = {isa = PBXBuildFile; fileRef = 730CE8E019210083005D736F /* UIImage+Scale.m */; };
+		730CE8E619211500005D736F /* ExpenseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 730CE8E419211500005D736F /* ExpenseDetailViewController.m */; };
+		730CE8E719211500005D736F /* ExpenseDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 730CE8E519211500005D736F /* ExpenseDetailViewController.xib */; };
+		730CE8EB192153DB005D736F /* EditExpenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 730CE8E9192153DB005D736F /* EditExpenseViewController.m */; };
+		730CE8EC192153DB005D736F /* EditExpenseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 730CE8EA192153DB005D736F /* EditExpenseViewController.xib */; };
 		7335437318D27B39007ABED2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335437218D27B39007ABED2 /* Foundation.framework */; };
 		7335437518D27B39007ABED2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335437418D27B39007ABED2 /* CoreGraphics.framework */; };
 		7335437718D27B39007ABED2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7335437618D27B39007ABED2 /* UIKit.framework */; };
@@ -55,6 +60,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		730CE8E019210083005D736F /* UIImage+Scale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Scale.m"; sourceTree = "<group>"; };
+		730CE8E119210083005D736F /* UIImage+Scale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Scale.h"; sourceTree = "<group>"; };
+		730CE8E319211500005D736F /* ExpenseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpenseDetailViewController.h; sourceTree = "<group>"; };
+		730CE8E419211500005D736F /* ExpenseDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpenseDetailViewController.m; sourceTree = "<group>"; };
+		730CE8E519211500005D736F /* ExpenseDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExpenseDetailViewController.xib; sourceTree = "<group>"; };
+		730CE8E8192153DB005D736F /* EditExpenseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditExpenseViewController.h; sourceTree = "<group>"; };
+		730CE8E9192153DB005D736F /* EditExpenseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditExpenseViewController.m; sourceTree = "<group>"; };
+		730CE8EA192153DB005D736F /* EditExpenseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditExpenseViewController.xib; sourceTree = "<group>"; };
+		730CE8ED19215C1C005D736F /* UpdateDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateDelegate.h; sourceTree = "<group>"; };
 		7335436F18D27B39007ABED2 /* ERApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ERApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7335437218D27B39007ABED2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7335437418D27B39007ABED2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -163,6 +177,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		730CE8DF1921007B005D736F /* UIImage+Scale */ = {
+			isa = PBXGroup;
+			children = (
+				730CE8E019210083005D736F /* UIImage+Scale.m */,
+				730CE8E119210083005D736F /* UIImage+Scale.h */,
+			);
+			name = "UIImage+Scale";
+			sourceTree = "<group>";
+		};
 		7335436618D27B39007ABED2 = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +222,7 @@
 		7335437818D27B39007ABED2 /* ERApp */ = {
 			isa = PBXGroup;
 			children = (
+				730CE8DF1921007B005D736F /* UIImage+Scale */,
 				738D895E191443590062CC30 /* Reachability */,
 				73F1981018FB7F76000C9BFE /* SBJson */,
 				73F197F318FB7F57000C9BFE /* ASI */,
@@ -224,6 +248,13 @@
 				73DACFDB19204EE5007FBA34 /* OptionSelectorViewController.m */,
 				73DACFDC19204EE5007FBA34 /* OptionSelectorViewController.xib */,
 				73DACFDF192059F2007FBA34 /* SelectDelegate.h */,
+				730CE8E319211500005D736F /* ExpenseDetailViewController.h */,
+				730CE8E419211500005D736F /* ExpenseDetailViewController.m */,
+				730CE8E519211500005D736F /* ExpenseDetailViewController.xib */,
+				730CE8E8192153DB005D736F /* EditExpenseViewController.h */,
+				730CE8E9192153DB005D736F /* EditExpenseViewController.m */,
+				730CE8EA192153DB005D736F /* EditExpenseViewController.xib */,
+				730CE8ED19215C1C005D736F /* UpdateDelegate.h */,
 				73F1983618FB805E000C9BFE /* Expense.h */,
 				73F1983718FB805E000C9BFE /* Expense.m */,
 				7335438A18D27B39007ABED2 /* Images.xcassets */,
@@ -388,7 +419,9 @@
 				73DACFDE19204EE5007FBA34 /* OptionSelectorViewController.xib in Resources */,
 				7335437D18D27B39007ABED2 /* InfoPlist.strings in Resources */,
 				73F197E818FB7B5B000C9BFE /* SignupViewController.xib in Resources */,
+				730CE8E719211500005D736F /* ExpenseDetailViewController.xib in Resources */,
 				733543AE18D27DBE007ABED2 /* LoginViewController.xib in Resources */,
+				730CE8EC192153DB005D736F /* EditExpenseViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +434,7 @@
 			files = (
 				7335438318D27B39007ABED2 /* AppDelegate.m in Sources */,
 				73F1983518FB7F8D000C9BFE /* SBJsonWriter.m in Sources */,
+				730CE8E619211500005D736F /* ExpenseDetailViewController.m in Sources */,
 				73F1980E18FB7F6B000C9BFE /* ASIInputStream.m in Sources */,
 				73F1982D18FB7F8D000C9BFE /* SBJsonStreamParserAccumulator.m in Sources */,
 				73F197F118FB7D3C000C9BFE /* AddExpenseViewController.m in Sources */,
@@ -420,8 +454,10 @@
 				73F1982F18FB7F8D000C9BFE /* SBJsonStreamParserState.m in Sources */,
 				733543AD18D27DBE007ABED2 /* LoginViewController.m in Sources */,
 				73F1980F18FB7F6B000C9BFE /* ASINetworkQueue.m in Sources */,
+				730CE8EB192153DB005D736F /* EditExpenseViewController.m in Sources */,
 				73F1980818FB7F6B000C9BFE /* ASIAuthenticationDialog.m in Sources */,
 				73F1980C18FB7F6B000C9BFE /* ASIFormDataRequest.m in Sources */,
+				730CE8E219210083005D736F /* UIImage+Scale.m in Sources */,
 				73F1982A18FB7F8D000C9BFE /* NSObject+SBJson.m in Sources */,
 				73F1983818FB805E000C9BFE /* Expense.m in Sources */,
 				73F197EC18FB7CA9000C9BFE /* ExpenseViewController.m in Sources */,

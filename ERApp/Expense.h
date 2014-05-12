@@ -16,11 +16,11 @@
     double amount;
     NSString *currency;
     NSString *time;
-    UIImage *receipt;
+    NSString *receipt;
     NSString *note;
 }
 
--(id)initWithID:(NSString*)eid vendor:(NSString*)v location:(NSString*)l type:(NSString*)ty amount:(double)a currency:(NSString*)c time:(NSString*)t receipt:(UIImage*)r note:(NSString*)n;
+-(id)initWithID:(NSString*)eid vendor:(NSString*)v location:(NSString*)l type:(NSString*)ty amount:(double)a currency:(NSString*)c time:(NSString*)t receipt:(NSString*)r note:(NSString*)n;
 
 @property (nonatomic,readonly) NSString *expenseID;
 @property (nonatomic,readonly) NSString *vendor;
@@ -29,7 +29,7 @@
 @property (nonatomic,readonly) double amount;
 @property (nonatomic,readonly) NSString *currency;
 @property (nonatomic,readonly) NSString *time;
-@property (nonatomic,readonly) UIImage *receipt;
+@property (nonatomic,readonly) NSString *receipt;
 @property (nonatomic,readonly) NSString *note;
 
 @end
