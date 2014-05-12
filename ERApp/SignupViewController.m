@@ -231,7 +231,6 @@
     if (indexPath.section==2 && indexPath.row==0 && !processing) {
         dismissFlag = YES;
         AccountTypeViewController *typeView = [[AccountTypeViewController alloc] initWithType:accountType];
-        [typeView setTitle:@"Select Account Type"];
         [typeView setDelegate:self];
         [self resignKeyboard];
         [self.navigationController pushViewController:typeView animated:YES];
@@ -415,15 +414,16 @@
         [pass setEnabled:NO];
         [passconf setEnabled:NO];
         [company setEnabled:NO];
-        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com/signup"]];
+        datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/signup"]];
+        [datReq setDelegate:self];
         [datReq setPostValue:email.text forKey:@"Username"];
         [datReq setPostValue:pass.text forKey:@"Password"];
         [datReq setPostValue:passconf.text forKey:@"ConfirmPassword"];
         [datReq setPostValue:fname.text forKey:@"FirstName"];
         [datReq setPostValue:lname.text forKey:@"LastName"];
-        [datReq setPostValue:[NSNumber numberWithBool:accountType] forKey:@"IsCorp"];
+        [datReq setPostValue:[NSNumber numberWithBool:accountType] forKey:@"isCorp"];
         if (accountType==1) {
-            [datReq setPostValue:company forKey:@"CorpName"];
+            [datReq setPostValue:company.text forKey:@"CorpName"];
         }
         [datReq startAsynchronous];
     }
@@ -477,8 +477,15 @@
         [alert show];
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Up Successful" message:[resp objectForKey:@"Message"] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
+        if ([resp objectForKey:@"Message"]!=nil) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Up Successful" message:[resp objectForKey:@"Message"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Sign Up" message:[resp objectForKey:@"An unknown error occured. Please try again later."] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+        }
     }
     
     [fname setEnabled:YES];

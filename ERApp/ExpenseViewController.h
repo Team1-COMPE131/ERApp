@@ -10,11 +10,14 @@
 #import "ASIFormDataRequest.h"
 #import "ExpenseViewController.h"
 #import "Expense.h"
+#import "SBJson.h"
 
-@interface ExpenseViewController : UIViewController {
+@interface ExpenseViewController : UIViewController<UITableViewDelegate,UITableViewDataSource,ASIHTTPRequestDelegate> {
     ASIFormDataRequest *datReq;
     NSMutableArray *expenses;
+    IBOutlet UITableView *table;
+    UIRefreshControl *refresher;
+    NSUserDefaults *defaults;
+    IBOutlet UILabel *accountLabel;
 }
--(void)getExpenseReports;
--(void)startExpenseReport;
 @end

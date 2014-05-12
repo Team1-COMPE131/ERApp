@@ -23,6 +23,8 @@
 		738D8962191443800062CC30 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 738D8961191443800062CC30 /* MobileCoreServices.framework */; };
 		73A57ED7191CDD75007677B3 /* AccountTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73A57ED5191CDD75007677B3 /* AccountTypeViewController.m */; };
 		73A57ED8191CDD75007677B3 /* AccountTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73A57ED6191CDD75007677B3 /* AccountTypeViewController.xib */; };
+		73DACFDD19204EE5007FBA34 /* OptionSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73DACFDB19204EE5007FBA34 /* OptionSelectorViewController.m */; };
+		73DACFDE19204EE5007FBA34 /* OptionSelectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73DACFDC19204EE5007FBA34 /* OptionSelectorViewController.xib */; };
 		73F197E718FB7B5B000C9BFE /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73F197E518FB7B5B000C9BFE /* SignupViewController.m */; };
 		73F197E818FB7B5B000C9BFE /* SignupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 73F197E618FB7B5B000C9BFE /* SignupViewController.xib */; };
 		73F197EC18FB7CA9000C9BFE /* ExpenseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 73F197EA18FB7CA9000C9BFE /* ExpenseViewController.m */; };
@@ -81,6 +83,10 @@
 		73A57ED5191CDD75007677B3 /* AccountTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountTypeViewController.m; sourceTree = "<group>"; };
 		73A57ED6191CDD75007677B3 /* AccountTypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountTypeViewController.xib; sourceTree = "<group>"; };
 		73A57ED9191CDDB3007677B3 /* AccountTypeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountTypeDelegate.h; sourceTree = "<group>"; };
+		73DACFDA19204EE5007FBA34 /* OptionSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionSelectorViewController.h; sourceTree = "<group>"; };
+		73DACFDB19204EE5007FBA34 /* OptionSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionSelectorViewController.m; sourceTree = "<group>"; };
+		73DACFDC19204EE5007FBA34 /* OptionSelectorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OptionSelectorViewController.xib; sourceTree = "<group>"; };
+		73DACFDF192059F2007FBA34 /* SelectDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectDelegate.h; sourceTree = "<group>"; };
 		73F197E418FB7B5B000C9BFE /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
 		73F197E518FB7B5B000C9BFE /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 		73F197E618FB7B5B000C9BFE /* SignupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignupViewController.xib; sourceTree = "<group>"; };
@@ -214,6 +220,10 @@
 				73F197EE18FB7D3C000C9BFE /* AddExpenseViewController.h */,
 				73F197EF18FB7D3C000C9BFE /* AddExpenseViewController.m */,
 				73F197F018FB7D3C000C9BFE /* AddExpenseViewController.xib */,
+				73DACFDA19204EE5007FBA34 /* OptionSelectorViewController.h */,
+				73DACFDB19204EE5007FBA34 /* OptionSelectorViewController.m */,
+				73DACFDC19204EE5007FBA34 /* OptionSelectorViewController.xib */,
+				73DACFDF192059F2007FBA34 /* SelectDelegate.h */,
 				73F1983618FB805E000C9BFE /* Expense.h */,
 				73F1983718FB805E000C9BFE /* Expense.m */,
 				7335438A18D27B39007ABED2 /* Images.xcassets */,
@@ -375,6 +385,7 @@
 				73F197ED18FB7CA9000C9BFE /* ExpenseViewController.xib in Resources */,
 				73F197F218FB7D3C000C9BFE /* AddExpenseViewController.xib in Resources */,
 				7335438B18D27B39007ABED2 /* Images.xcassets in Resources */,
+				73DACFDE19204EE5007FBA34 /* OptionSelectorViewController.xib in Resources */,
 				7335437D18D27B39007ABED2 /* InfoPlist.strings in Resources */,
 				73F197E818FB7B5B000C9BFE /* SignupViewController.xib in Resources */,
 				733543AE18D27DBE007ABED2 /* LoginViewController.xib in Resources */,
@@ -416,6 +427,7 @@
 				73F197EC18FB7CA9000C9BFE /* ExpenseViewController.m in Sources */,
 				73A57ED7191CDD75007677B3 /* AccountTypeViewController.m in Sources */,
 				73F1983418FB7F8D000C9BFE /* SBJsonUTF8Stream.m in Sources */,
+				73DACFDD19204EE5007FBA34 /* OptionSelectorViewController.m in Sources */,
 				73F1983318FB7F8D000C9BFE /* SBJsonTokeniser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

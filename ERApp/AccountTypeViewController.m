@@ -19,6 +19,7 @@
     self = [super initWithNibName:@"AccountTypeViewController" bundle:nil];
     if (self) {
         accountType = type;
+        [self.navigationItem setTitle:@"Select Account Type"];
     }
     return self;
 }

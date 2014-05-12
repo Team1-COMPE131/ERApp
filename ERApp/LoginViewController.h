@@ -17,7 +17,6 @@
     ASIFormDataRequest *datReq;
 }
 
--(void)login;
 -(void)signup;
 
 @end

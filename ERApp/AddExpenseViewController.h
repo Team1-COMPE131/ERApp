@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "ASIFormDataRequest.h"
+#import "OptionSelectorViewController.h"
 
-@interface AddExpenseViewController : UIViewController<ASIHTTPRequestDelegate> {
+@interface AddExpenseViewController : UIViewController<ASIHTTPRequestDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,SelectDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
     ASIFormDataRequest *datReq;
+    IBOutlet UITableView *table;
 }
-
--(void)verifyReport;
--(void)submitReport;
 
 @end

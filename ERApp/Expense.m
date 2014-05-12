@@ -9,42 +9,22 @@
 #import "Expense.h"
 
 @implementation Expense
+@synthesize expenseID, vendor, location, type, amount, currency, time, receipt, note;
 
--(id)initWithExpense:(NSDictionary *)expenseData {
-    self = [self initWithTitle:[expenseData objectForKey:@"title"] category:[[expenseData objectForKey:@"category"] intValue] amount:[[expenseData objectForKey:@"amount"] doubleValue] date:[expenseData objectForKey:@"date"] receipt:[expenseData objectForKey:@"receipt"]];
-    return self;
-}
-
--(id)initWithTitle:(NSString *)t category:(int)c amount:(double)a date:(NSDate *)d receipt:(NSData *)r {
+-(id)initWithID:(NSString *)eid vendor:(NSString *)v location:(NSString *)l type:(NSString *)ty amount:(double)a currency:(NSString *)c time:(NSString *)t receipt:(UIImage *)r note:(NSString *)n {
     self = [super init];
     if (self) {
-        title = t;
-        category = c;
+        expenseID = eid;
+        vendor = v;
+        location = l;
+        type = ty;
         amount = a;
-        date = d;
+        currency = c;
+        time = t;
         receipt = r;
+        note = n;
     }
     return self;
-}
-
--(NSString*)getTitle {
-    return title;
-}
-
--(int)getCategory {
-    return category;
-}
-
--(double)getAmount {
-    return amount;
-}
-
--(NSDate*)getDate {
-    return date;
-}
-
--(NSData*)getReceipt {
-    return receipt;
 }
 
 @end

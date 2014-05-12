@@ -11,6 +11,7 @@
 @interface LoginViewController () {
     UITextField *username;
     UITextField *password;
+    UISwitch *corpSwitch;
     BOOL loggingIn;
 }
 
@@ -35,12 +36,11 @@
     [username setDelegate:self];
     [username setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [username setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [username setKeyboardType:UIKeyboardTypeDefault];
+    [username setKeyboardType:UIKeyboardTypeEmailAddress];
     [username setTextColor:[UIColor darkGrayColor]];
     [username setReturnKeyType:UIReturnKeyNext];
     [username setClearButtonMode:UITextFieldViewModeWhileEditing];
     [username setPlaceholder:@"Email"];
-    [username setKeyboardType:UIKeyboardTypeEmailAddress];
     password = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, 305, 44)];
     [password setDelegate:self];
     [password setSecureTextEntry:YES];
@@ -48,10 +48,23 @@
     [password setReturnKeyType:UIReturnKeyDone];
     [password setPlaceholder:@"Password"];
     loggingIn = NO;
+    corpSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
 }
 
--(void)viewDidAppear:(BOOL)animated {
-    [username becomeFirstResponder];
+-(void)viewWillAppear:(BOOL)animated {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"isLoggedIn"]!=nil) {
+        ExpenseViewController *expView = [[ExpenseViewController alloc] initWithNibName:@"ExpenseViewController" bundle:nil];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:expView];
+        [navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+        [self.navigationController presentViewController:navController animated:NO completion:^{
+            [username setText:@""];
+            [password setText:@""];
+        }];
+    }
+    else {
+        [username becomeFirstResponder];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,10 +74,6 @@
 }
 
 #pragma mark Public Methods
-
--(void)login {
-    
-}
 
 -(void)signup {
     SignupViewController *sView = [[SignupViewController alloc] initWithNibName:@"SignupViewController" bundle:nil];
@@ -80,7 +89,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section==0) {
-        return 2;
+        return 3;
     }
     return 1;
 }
@@ -97,8 +106,12 @@
         if (indexPath.row==0) {
             [cell.contentView addSubview:username];
         }
-        else {
+        else if(indexPath.row==1) {
             [cell.contentView addSubview:password];
+        }
+        else {
+            [cell.textLabel setText:@"Login as Company"];
+            [cell setAccessoryView:corpSwitch];
         }
     }
     else {
@@ -134,6 +147,7 @@
         loggingIn = YES;
         [username setEnabled:NO];
         [password setEnabled:NO];
+        [corpSwitch setEnabled:NO];
         [[[tableView cellForRowAtIndexPath:indexPath] textLabel] setTextColor:[UIColor grayColor]];
         [[tableView cellForRowAtIndexPath:indexPath] setSelectionStyle:UITableViewCellSelectionStyleNone];
         NSURL *url = [[NSURL alloc] initWithString:@"http://server2.kevjung.com:3000/login"];
@@ -141,6 +155,7 @@
         [datReq setDelegate:self];
         [datReq setPostValue:username.text forKey:@"Username"];
         [datReq setPostValue:password.text forKey:@"Password"];
+        [datReq setPostValue:[NSNumber numberWithBool:corpSwitch.isOn] forKey:@"isCorp"];
         [datReq startAsynchronous];
     }
 }
@@ -163,6 +178,7 @@
     loggingIn = NO;
     [username setEnabled:YES];
     [password setEnabled:YES];
+    [corpSwitch setEnabled:YES];
     [[[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] textLabel] setTextColor:[UIColor blackColor]];
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
     NSLog(@"%@", request.responseString);
@@ -174,7 +190,29 @@
         [alert show];
     }
     else {
-        
+        if ([resp objectForKey:@"Welcome"]==nil&&[resp objectForKey:@"id"]==nil&&[resp objectForKey:@"isCorp"]==nil) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Log In" message:@"An unknown error occured. Please try again later." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+        else {
+            NSString *usn = [resp objectForKey:@"Welcome"];
+            NSString *ident = [resp objectForKey:@"id"];
+            BOOL isCorp = [[resp objectForKey:@"isCorp"] boolValue];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:[NSNumber numberWithBool:1] forKey:@"isLoggedIn"];
+            [defaults setObject:usn forKey:@"username"];
+            [defaults setObject:ident forKey:@"id"];
+            [defaults setObject:[NSNumber numberWithBool:isCorp] forKey:@"isCorp"];
+            [defaults synchronize];
+            
+            ExpenseViewController *expView = [[ExpenseViewController alloc] initWithNibName:@"ExpenseViewController" bundle:nil];
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:expView];
+            [navController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            [self.navigationController presentViewController:navController animated:YES completion:^{
+                [username setText:@""];
+                [password setText:@""];
+            }];
+        }
     }
     datReq = nil;
 }
@@ -183,6 +221,7 @@
     loggingIn = NO;
     [username setEnabled:YES];
     [password setEnabled:YES];
+    [corpSwitch setEnabled:YES];
     [[[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] textLabel] setTextColor:[UIColor blackColor]];
     [[table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]] setSelectionStyle:UITableViewCellSelectionStyleDefault];
     

@@ -9,19 +9,27 @@
 #import <Foundation/Foundation.h>
 
 @interface Expense : NSObject {
-    NSString *title;
-    int category;
+    NSString *expenseID;
+    NSString *vendor;
+    NSString *location;
+    NSString *type;
     double amount;
-    NSDate *date;
-    NSData *receipt;
+    NSString *currency;
+    NSString *time;
+    UIImage *receipt;
+    NSString *note;
 }
 
--(id)initWithExpense:(NSDictionary*)expenseData;
--(id)initWithTitle:(NSString*)t category:(int)c amount:(double)a date:(NSDate*)d receipt:(NSData*)r;
--(NSString*)getTitle;
--(int)getCategory;
--(double)getAmount;
--(NSDate*)getDate;
--(NSData*)getReceipt;
+-(id)initWithID:(NSString*)eid vendor:(NSString*)v location:(NSString*)l type:(NSString*)ty amount:(double)a currency:(NSString*)c time:(NSString*)t receipt:(UIImage*)r note:(NSString*)n;
+
+@property (nonatomic,readonly) NSString *expenseID;
+@property (nonatomic,readonly) NSString *vendor;
+@property (nonatomic,readonly) NSString *location;
+@property (nonatomic,readonly) NSString *type;
+@property (nonatomic,readonly) double amount;
+@property (nonatomic,readonly) NSString *currency;
+@property (nonatomic,readonly) NSString *time;
+@property (nonatomic,readonly) UIImage *receipt;
+@property (nonatomic,readonly) NSString *note;
 
 @end
