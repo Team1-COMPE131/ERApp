@@ -215,10 +215,9 @@
         [self.navigationController pushViewController:optView animated:YES];
     }
     else if(indexPath.section==1&&indexPath.row==0) {
-        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-        [picker setDelegate:self];
-        [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
-        [self.navigationController presentViewController:picker animated:YES completion:nil];
+        UIActionSheet *pick = [[UIActionSheet alloc] initWithTitle:@"Add Expense Receipt" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Choose from Photo Library", @"Take a Picture", nil];
+        [pick setTag:222];
+        [pick showInView:self.navigationController.view];
     }
     else if (indexPath.section==2 && indexPath.row==1) {
         OptionSelectorViewController *optView = [[OptionSelectorViewController alloc] initWithType:1 preSelection:[[[tableView cellForRowAtIndexPath:indexPath] detailTextLabel] text]];
@@ -421,6 +420,25 @@
     UIImage *image = [(UIImage*)[info objectForKey:UIImagePickerControllerOriginalImage] imageScaledToScale:0.15f];
     selImage = image;
     [table reloadData];
+}
+
+#pragma mark UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (actionSheet.tag==222) {
+        if (buttonIndex==0) {
+            UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+            [picker setDelegate:self];
+            [picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+        }
+        else if(buttonIndex==1) {
+            UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+            [picker setDelegate:self];
+            [picker setSourceType:UIImagePickerControllerSourceTypeCamera];
+            [self.navigationController presentViewController:picker animated:YES completion:nil];
+        }
+    }
 }
 
 @end

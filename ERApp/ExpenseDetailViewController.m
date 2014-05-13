@@ -121,6 +121,18 @@
         }
     }
     
+    for (UILabel *label in cell.contentView.subviews) {
+        if ([label isKindOfClass:[UILabel class]] && [label tag]==200) {
+            [label removeFromSuperview];
+        }
+    }
+    
+    for (UIView *v in cell.contentView.subviews) {
+        if ([v isKindOfClass:[UIView class]] && [v tag]==300) {
+            [v removeFromSuperview];
+        }
+    }
+    
     if (indexPath.section==0) {
         if (indexPath.row==0) {
             [cell.textLabel setText:@"expense"];
@@ -158,8 +170,23 @@
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
         [imageView setTag:900];
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
-        if (receipt!=nil) {
+        if ((NSNull*)[expense receipt]!=[NSNull null]) {
             [imageView setImage:receipt];
+        }
+        else {
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+            [label setTag:200];
+            [label setText:@"Please update and add a receipt."];
+            [label setTextAlignment:NSTextAlignmentCenter];
+            [cell.contentView addSubview:label];
+            
+            UIView *flag = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, 44)];
+            [flag setTag:300];
+            CAGradientLayer *gradient = [CAGradientLayer layer];
+            gradient.frame = flag.bounds;
+            gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:247/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:222/255.0f green:215/255.0f blue:27.0/255.0f alpha:1.0f] CGColor]];
+            [flag.layer insertSublayer:gradient atIndex:0];
+            [cell.contentView addSubview:flag];
         }
         [cell.contentView addSubview:imageView];
     }
@@ -181,6 +208,9 @@
 
 -(double)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==2) {
+        if ((NSNull*)[expense receipt]==[NSNull null]) {
+            return 44.0f;
+        }
         return 320.0f;
     }
     else if(indexPath.section==3) {

@@ -13,7 +13,7 @@
 #import "UIImage+Scale.h"
 #import "UpdateDelegate.h"
 
-@interface EditExpenseViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,ASIHTTPRequestDelegate,UITextFieldDelegate,UITextViewDelegate,SelectDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
+@interface EditExpenseViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,ASIHTTPRequestDelegate,UITextFieldDelegate,UITextViewDelegate,SelectDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate> {
     IBOutlet UITableView *table;
     ASIFormDataRequest *datReq;
     Expense *expense;

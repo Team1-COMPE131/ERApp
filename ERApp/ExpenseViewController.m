@@ -51,13 +51,12 @@
     [self.navigationItem setRightBarButtonItem:add];
     [self setToolbarItems:@[[[UIBarButtonItem alloc] initWithTitle:@"Reports" style:UIBarButtonItemStylePlain target:self action:@selector(reports:)], [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil], [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout:)]]];
     downAlert = [[UIAlertView alloc] initWithTitle:@"Downloading Report..." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setToolbarHidden:NO animated:YES];
     self.navigationController.navigationBar.translucent = NO;
-    UIEdgeInsets inset = UIEdgeInsetsMake(0, 0, 64, 0);
-    [table setContentInset:inset];
-    [table setScrollIndicatorInsets:inset];
     if (filterSeg.selectedSegmentIndex==0) {
         datReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/expenses"]];
         [datReq setDelegate:self];
@@ -73,7 +72,6 @@
         [datReq setPostValue:[NSNumber numberWithLong:filterSeg.selectedSegmentIndex-1] forKey:@"filter"];
         [datReq startAsynchronous];
     }
-    [self.navigationController setToolbarHidden:NO animated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -135,13 +133,33 @@
     
     if ([e amount]>1000.0f && [[e currency] isEqualToString:@"USD"]) {
         [amount setTextColor:[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f]];
-        UIView *flag = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 3, 56)];
+        UIView *flag = [[UIView alloc] initWithFrame:CGRectMake(0, 5, 1.5, 46)];
         [flag setTag:300];
         CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = flag.bounds;
-        gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:255/255.0f green:106/255.0f blue:0.0f alpha:1.0f] CGColor]];
+        if ((NSNull*)e.receipt==[NSNull null]) {
+            gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:247/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:255/255.0f green:106/255.0f blue:0.0f alpha:1.0f] CGColor]];
+        }
+        else {
+            gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:255/255.0f green:106/255.0f blue:0.0f alpha:1.0f] CGColor]];
+        }
         [flag.layer insertSublayer:gradient atIndex:0];
-        [flag setBackgroundColor:[UIColor redColor]];
+        [cell.contentView addSubview:flag];
+    }
+    else if ((NSNull*)e.receipt==[NSNull null]) {
+        [amount setTextColor:[UIColor colorWithRed:0 green:160/255.0f blue:25/255.0f alpha:1.0f]];
+        UIView *flag = [[UIView alloc] initWithFrame:CGRectMake(0, 5, 1.5, 46)];
+        [flag setTag:300];
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = flag.bounds;
+        if ([e amount]>1000.0f && [[e currency] isEqualToString:@"USD"]) {
+            [amount setTextColor:[UIColor colorWithRed:255/255.0f green:136/255.0f blue:0.0f alpha:1.0f]];
+            gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:247/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:255/255.0f green:106/255.0f blue:0.0f alpha:1.0f] CGColor]];
+        }
+        else {
+            gradient.colors = @[(id)[[UIColor colorWithRed:255/255.0f green:247/255.0f blue:0.0f alpha:1.0f] CGColor], (id)[[UIColor colorWithRed:222/255.0f green:215/255.0f blue:27.0/255.0f alpha:1.0f] CGColor]];
+        }
+        [flag.layer insertSublayer:gradient atIndex:0];
         [cell.contentView addSubview:flag];
     }
     else {
@@ -305,7 +323,6 @@
 #pragma mark ASIHTTPRequest
 
 -(void)requestFinished:(ASIHTTPRequest *)request {
-    NSLog(@"%@", request.responseString);
     SBJsonParser *parser = [[SBJsonParser alloc] init];
     NSArray *resp = [parser objectWithString:request.responseString];
     if (resp==nil) {
@@ -343,6 +360,18 @@
         ASIFormDataRequest *csvReq = [[ASIFormDataRequest alloc] initWithURL:[NSURL URLWithString:@"http://server2.kevjung.com:3000/getcsv"]];
         [csvReq setPostValue:[defaults objectForKey:@"id"] forKey:@"id"];
         [csvReq setPostValue:[defaults objectForKey:@"isCorp"] forKey:@"isCorp"];
+        if (buttonIndex==0) {
+            [csvReq setPostValue:[NSNumber numberWithInt:3] forKey:@"filter"];
+        }
+        else if (buttonIndex==1) {
+            [csvReq setPostValue:[NSNumber numberWithInt:0] forKey:@"filter"];
+        }
+        else if (buttonIndex==2) {
+            [csvReq setPostValue:[NSNumber numberWithInt:1] forKey:@"filter"];
+        }
+        else if (buttonIndex==3) {
+            [csvReq setPostValue:[NSNumber numberWithInt:2] forKey:@"filter"];
+        }
         [csvReq setDownloadDestinationPath:[RESOURCES_DIR stringByAppendingPathComponent:@"report.csv"]];
         __unsafe_unretained ASIFormDataRequest *_csvReq = csvReq;
         [csvReq setCompletionBlock:^{
@@ -351,7 +380,7 @@
                 NSArray *activityItems = @[[NSURL fileURLWithPath:[RESOURCES_DIR stringByAppendingPathComponent:@"report.csv"]]];
                 UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
                 activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact];
-                [self presentViewController:activityVC animated:TRUE completion:nil];
+                [self.navigationController presentViewController:activityVC animated:TRUE completion:nil];
             }
             else {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Download Report" message:@"An error occurred while downloading Expense Report. Please try again later." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
